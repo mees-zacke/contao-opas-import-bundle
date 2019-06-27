@@ -7,3 +7,5 @@ services:
         Symfony\Component\DependencyInjection\ContainerAwareInterface:
             calls:
                 - ["setContainer", ["@service_container"]]
+    floxn.contao_opas_import_bundle.message_generator:
+        class: Floxn\ContaoOpasImportBundle\Library\MessageGenerator
