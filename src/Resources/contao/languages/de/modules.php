@@ -1,7 +1,7 @@
 <?php
 
 // Backend modules
-$GLOBALS['TL_LANG']['MOD']['opasImport'] = ['Opas Import', 'Zum Importieren.'];
+$GLOBALS['TL_LANG']['MOD']['opasImport'] = ['OPAS Import', 'Zum Importieren.'];
 
 // Backend modules
-$GLOBALS['TL_LANG']['MOD']['opasRefresh'] = ['Opas Update', 'Zum Updaten.'];
+$GLOBALS['TL_LANG']['MOD']['opasRefresh'] = ['OPAS Update', 'Zum Updaten.'];
