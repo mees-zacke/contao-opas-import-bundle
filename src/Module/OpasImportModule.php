@@ -96,22 +96,30 @@ foreach($xml->children() as $event) {
         $kategorie = '11';
     }
     elseif ($kategorieID == '13') {
-        $Datum = date('d.m.Y', (int)$eventStartDate);
-        echo '<p>' .$eventTitle. ' am ' .$Datum. ' ist bei <strong>Sonstiges</strong>';
+        $kategorie = '12';
     }
     else {
         // Wenn keine Kategorie vergeben wurde.
         $Datum = date('d.m.Y', (int)$eventStartDate);
-        echo '<p>' .$eventTitle. ' am ' .$Datum. ' wurde <strong>keiner Kategorie</strong> zugewiesen';
+        echo '<script type="text/javascript" language="Javascript">alert("' .$eventTitle. ' am ' .$Datum. ' wurde <strong>keiner Kategorie</strong> zugewiesen")</script>';
     }
 
     // Datenbank aktualisieren.
     $sqlUpdate = "REPLACE INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES ('" .$eventId. "', '" .$kategorie. "', '" .$eventTitle. "', '1', '" .$eventStartTime. "', '" .$eventEndTime. "', '" .$eventStartDate. "', '" .$eventEndDate. "', '" .$eventLocation. "', '" .$teaser. "')";
 
-    // Datenbank neue Datensätze hinzufügen.
-    $sqlNew = "INSERT INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES ('" .$eventId. "', '" .$kategorie. "', '" .$eventTitle. "', '1', '" .$eventStartTime. "', '" .$eventEndTime. "', '" .$eventStartDate. "', '" .$eventEndDate. "', '" .$eventLocation. "', '" .$teaser. "')";
+    $result = $db->insert('tl_calendar_events', array(
+       'id' => $eventId,
+       'pid' => $kategorie,
+       'title' => $eventTitle,
+       'addTime' => '1',
+       'startTime' => $eventStartTime,
+       'endTime' => $eventEndTime,
+       'startDate' => $eventStartDate,
+       'endDate' => $eventEndDate,
+       'location' => $eventLocation,
+       'teaser' => $teaser
+    ));
 
-    $result = mysqli_query($db, $sqlNew);
 
 }
 

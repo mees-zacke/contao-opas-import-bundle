@@ -96,8 +96,7 @@ foreach($xml->children() as $event) {
         $kategorie = '11';
     }
     elseif ($kategorieID == '13') {
-        $Datum = date('d.m.Y', (int)$eventStartDate);
-        echo '<p>' .$eventTitle. ' am ' .$Datum. ' ist bei <strong>Sonstiges</strong>';
+        $kategorie = '12';
     }
     else {
         // Wenn keine Kategorie vergeben wurde.
@@ -106,13 +105,21 @@ foreach($xml->children() as $event) {
     }
 
     // Datenbank aktualisieren.
-    $sqlUpdate = "REPLACE INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES ('" .$eventId. "', '" .$kategorie. "', '" .$eventTitle. "', '1', '" .$eventStartTime. "', '" .$eventEndTime. "', '" .$eventStartDate. "', '" .$eventEndDate. "', '" .$eventLocation. "', '" .$teaser. "')";
+    $sqlUpdate = "REPLACE INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES (:eventId, :kategorie, :eventTitle, :setTime, :eventStartTime, :eventEndTime, :eventStartDate, :eventEndDate, :eventLocation, :teaser)";
 
-    // Datenbank neue Datensätze hinzufügen.
-    $sqlNew = "INSERT INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES ('" .$eventId. "', '" .$kategorie. "', '" .$eventTitle. "', '1', '" .$eventStartTime. "', '" .$eventEndTime. "', '" .$eventStartDate. "', '" .$eventEndDate. "', '" .$eventLocation. "', '" .$teaser. "')";
-
-    $result = mysqli_query($db, $sqlUpdate);
+    $result = $db->prepare($sqlUpdate);
+    $result->bindParam('eventId', $eventId);
+    $result->bindParam('kategorie', $kategorie);
+    $result->bindParam('eventTitle', $eventTitle);
+    $result->bindParam('setTime', $setTime = '1', $setTime);
+    $result->bindParam('eventStartTime', $eventStartTime);
+    $result->bindParam('eventEndTime', $eventEndTime);
+    $result->bindParam('eventStartDate', $eventStartDate);
+    $result->bindParam('eventEndDate', $eventEndDate);
+    $result->bindParam('eventLocation', $eventLocation);
+    $result->bindParam('teaser', $teaser);
+    $result->execute();
 
 }
 
-echo '<script type="text/javascript" language="Javascript">alert("Der Import ist abgeschlossen")</script>';
+echo '<script type="text/javascript" language="Javascript">alert("Die aktualisierung ist abgeschlossen")</script>';
