@@ -105,20 +105,20 @@ foreach($xml->children() as $event) {
     }
 
     // Datenbank aktualisieren.
-    $sqlUpdate = "REPLACE INTO tl_calendar_events(id, pid, title, addTime, startTime, endTime, startDate, endDate, location, teaser) VALUES (:eventId, :kategorie, :eventTitle, :setTime, :eventStartTime, :eventEndTime, :eventStartDate, :eventEndDate, :eventLocation, :teaser)";
+    $result = $db->update('tl_calendar_events', array(
+       'pid' => $kategorie,
+       'title' => $eventTitle,
+       'addTime' => '1',
+       'startTime' => $eventStartTime,
+       'endTime' => $eventEndTime,
+       'startDate' => $eventStartDate,
+       'endDate' => $eventEndDate,
+       'location' => $eventLocation,
+       'teaser' => $teaser
+    ), array(
+       'id' => $eventId,
+    ));
 
-    $result = $db->prepare($sqlUpdate);
-    $result->bindParam('eventId', $eventId);
-    $result->bindParam('kategorie', $kategorie);
-    $result->bindParam('eventTitle', $eventTitle);
-    $result->bindParam('setTime', $setTime = '1', $setTime);
-    $result->bindParam('eventStartTime', $eventStartTime);
-    $result->bindParam('eventEndTime', $eventEndTime);
-    $result->bindParam('eventStartDate', $eventStartDate);
-    $result->bindParam('eventEndDate', $eventEndDate);
-    $result->bindParam('eventLocation', $eventLocation);
-    $result->bindParam('teaser', $teaser);
-    $result->execute();
 
 }
 
