@@ -114,11 +114,11 @@ foreach($xml->children() as $event) {
        'startDate' => $eventStartDate,
        'endDate' => $eventEndDate,
        'location' => $eventLocation,
-       'teaser' => $teaser
+       'teaser' => $teaser,
+       'source' => 'default'
     ), array(
        'id' => $eventId,
     ));
-
 
 }
 
