@@ -9,6 +9,8 @@ $ausgabe = simplexml_load_file($url);
 
 $xml = file_get_contents($url, false, $context);
 $xml = simplexml_load_string($xml);
+$updateCounter = 0;
+$importCounter = 0;
 
 foreach($xml->children() as $event) {
 
@@ -45,25 +47,30 @@ foreach($xml->children() as $event) {
       $workComposerLastname = $workItem->workComposerLastname;
       $workComposerFullname = $workComposerFirstname. ' ' .$workComposerLastname;
 
-      $komponisten .= '<p class="event-komponist"><strong>' .$workComposerFullname. '</strong>, ' .$workTitle. ' ' .$workTitle2. ' ' .$workTitle3.' </p>';
+      $komponisten .= '<span class="event-komponist"><strong>' .$workComposerFullname. '</strong>, ' .$workTitle. ' ' .$workTitle2. ' ' .$workTitle3.' </span><br />';
     };
 
     // Solisten
     $solisten = '';
-    foreach($event->eventSoloistItem as $soloist) {
-      $solistFirstname = $soloist->soloistFirstname;
-      $solistLastname = $soloist->soloistLastname;
-      $solistFullname = $soloistFirstname. ' ' .$soloistLastname;
-      $solistInstrument = $soloist->soloistInstrument;
+    foreach($event->eventSoloistItem as $solist) {
+      $solistFirstname = $solist->soloistFirstname;
+      $solistLastname = $solist->soloistLastname;
+      $solistFullname = $solistFirstname. ' ' .$solistLastname;
+      $solistInstrument = $solist->soloistInstrument;
 
-      $solisten .= '<p class="event-solist">' .$solistFullname. ', ' .$solistInstrument. '</p>';
+      $solisten .= '<span class="event-solist">' .$solistFullname. ', ' .$solistInstrument. '</span><br />';
     };
 
     // Dirigenten
-    $conductor = '<p class="event-dirigent">' .$event->eventConductor. '</p>';
+    $conductor = '';
+    if ($event->eventConductor != '') {
+        $conductor = '<span class="event-dirigent">' .$event->eventConductor. ', Leitung</span><br />';
+    } else {
+        $conductor = $conductor;
+    }
 
     // Den Teaser mit allen Inhalten zusammenfassen
-    $teaser = $komponisten . $solisten . $conductor;
+    $teaser = '<p>' . $komponisten . '</p>' . '<p>' . $solisten . $conductor . '</p>';
 
     // Zuweiseung zu den Archiven
     $kategorie = '';
@@ -101,25 +108,53 @@ foreach($xml->children() as $event) {
     else {
         // Wenn keine Kategorie vergeben wurde.
         $Datum = date('d.m.Y', (int)$eventStartDate);
-        echo '<p>' .$eventTitle. ' am ' .$Datum. ' wurde <strong>keiner Kategorie</strong> zugewiesen';
+        echo '<script type="text/javascript" language="Javascript">alert("Keiner Kategorie zugewiesen: ' .$eventTitle. ' vom ' .$Datum. '")</script>';
     }
 
     // Datenbank aktualisieren.
-    $result = $db->update('tl_calendar_events', array(
-       'pid' => $kategorie,
-       'title' => $eventTitle,
-       'addTime' => '1',
-       'startTime' => $eventStartTime,
-       'endTime' => $eventEndTime,
-       'startDate' => $eventStartDate,
-       'endDate' => $eventEndDate,
-       'location' => $eventLocation,
-       'teaser' => $teaser,
-       'source' => 'default'
-    ), array(
-       'id' => $eventId,
-    ));
+
+    // Fetch EventID
+    $DBEventId = $db->fetchColumn('SELECT id FROM tl_calendar_events WHERE id = ?', array($eventId), 0);
+    if ($DBEventId == $eventId) {
+
+        $result = $db->update('tl_calendar_events', array(
+           'pid' => $kategorie,
+           'title' => $eventTitle,
+           'addTime' => '1',
+           'startTime' => $eventStartTime,
+           'endTime' => $eventEndTime,
+           'startDate' => $eventStartDate,
+           'endDate' => $eventEndDate,
+           'location' => $eventLocation,
+           'teaser' => $teaser,
+           'source' => 'default',
+           'author' => '3'
+        ), array(
+           'id' => $eventId,
+        ));
+
+        $updateCounter ++;
+    }
+    else {
+
+        $result = $db->insert('tl_calendar_events', array(
+           'id' => $eventId,
+           'pid' => $kategorie,
+           'title' => $eventTitle,
+           'addTime' => '1',
+           'startTime' => $eventStartTime,
+           'endTime' => $eventEndTime,
+           'startDate' => $eventStartDate,
+           'endDate' => $eventEndDate,
+           'location' => $eventLocation,
+           'teaser' => $teaser,
+           'source' => 'default',
+           'author' => '3'
+        ));
+
+        $importCounter ++;
+    }
+
 
 }
-
-echo '<script type="text/javascript" language="Javascript">alert("Die aktualisierung ist abgeschlossen")</script>';
+echo '<script type="text/javascript" language="Javascript">alert("Es wurden ' . $updateCounter . ' Updates durchgeführt und ' . $importCounter . ' neu importiert")</script>';
