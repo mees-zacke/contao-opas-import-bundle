@@ -50,11 +50,11 @@ foreach($xml->children() as $event) {
 
     // Solisten
     $solisten = '';
-    foreach($event->eventSoloistItem as $soloist) {
-      $solistFirstname = $soloist->soloistFirstname;
-      $solistLastname = $soloist->soloistLastname;
-      $solistFullname = $soloistFirstname. ' ' .$soloistLastname;
-      $solistInstrument = $soloist->soloistInstrument;
+    foreach($event->eventSoloistItem as $solist) {
+      $solistFirstname = $solist->soloistFirstname;
+      $solistLastname = $solist->soloistLastname;
+      $solistFullname = $solistFirstname. ' ' .$solistLastname;
+      $solistInstrument = $solist->soloistInstrument;
 
       $solisten .= '<p class="event-solist">' .$solistFullname. ', ' .$solistInstrument. '</p>';
     };
@@ -105,6 +105,9 @@ foreach($xml->children() as $event) {
     }
 
     // Datenbank aktualisieren.
+    echo '<script type="text/javascript" language="Javascript">alert("EventId: ' .$eventId. '")</script>';
+    //$DBEventId = $conn->fetchAssoc('SELECT * FROM tl_calendar_events WHERE uid = ?', array($eventId));
+    //echo '<script type="text/javascript" language="Javascript">alert("EventId: ' .$DBEventId. '")</script>';
     $result = $db->insert('tl_calendar_events', array(
        'id' => $eventId,
        'pid' => $kategorie,
@@ -118,7 +121,6 @@ foreach($xml->children() as $event) {
        'teaser' => $teaser,
        'source' => 'default'
     ));
-
 
 }
 
