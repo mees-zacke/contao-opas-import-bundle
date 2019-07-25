@@ -1,7 +1,4 @@
 <?php
 
 // Backend modules
-$GLOBALS['TL_LANG']['MOD']['opasImport'] = ['OPAS Import', 'Zum Importieren.'];
-
-// Backend modules
-$GLOBALS['TL_LANG']['MOD']['opasRefresh'] = ['OPAS Update', 'Zum Updaten.'];
+$GLOBALS['TL_LANG']['MOD']['opasImport'] = ['OPAS Import', 'Update der vorhandenen und importieren von neuen Events'];
