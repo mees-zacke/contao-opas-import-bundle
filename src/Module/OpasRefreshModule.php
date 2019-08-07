@@ -3,7 +3,7 @@
 $db = \Contao\System::getContainer()->get('database_connection');
 
 $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-$url = '../files/daten/export.xml';
+$url = '../files/xml/export.xml';
 
 $ausgabe = simplexml_load_file($url);
 

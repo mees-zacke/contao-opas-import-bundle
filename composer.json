@@ -1,7 +1,7 @@
 {
     "name": "floxn/contao-opas-import-bundle",
     "type": "contao-bundle",
-    "description": "Extension to import data from OPAS via Uploaded XML file to /files/daten/export.xml",
+    "description": "Extension to import data from OPAS via Uploaded XML file to /files/xml/export.xml",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
