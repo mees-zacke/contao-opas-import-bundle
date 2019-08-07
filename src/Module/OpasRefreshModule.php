@@ -126,6 +126,7 @@ foreach($xml->children() as $event) {
            'startDate' => $eventStartDate,
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
+           'konzertOrt' => $eventLocationCity,
            'teaser' => $teaser,
            'source' => 'default',
            'author' => '3'
@@ -147,6 +148,7 @@ foreach($xml->children() as $event) {
            'startDate' => $eventStartDate,
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
+           'konzertOrt' => $eventLocationCity,
            'teaser' => $teaser,
            'source' => 'default',
            'author' => '3'
