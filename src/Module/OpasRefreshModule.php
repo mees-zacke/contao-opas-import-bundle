@@ -172,6 +172,7 @@ foreach($xml->children() as $event) {
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
            'konzertOrt' => $eventLocationCity,
+           'categories' => 'a:1:{i:0;s:2:"' . $DBIdCounter. '";}',
            'teaser' => $teaser,
            'source' => 'default',
            'author' => '3'
