@@ -1,5 +1,3 @@
-// 2019.09.05 Florian Krohmer
-
 <?php
 
 $db = \Contao\System::getContainer()->get('database_connection');
