@@ -21,8 +21,8 @@ $importCounter = 0;
 // function for generating aliase wihtout special chars
 function generateAlias($string)
 {
-    $search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", "´");
-    $replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "");
+    $search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", "´", "ç");
+    $replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "", "c");
     $strReplace = str_replace($search, $replace, $string);
     return strtolower($strReplace);
 }
@@ -130,41 +130,32 @@ foreach($xml->children() as $event) {
 
     $DBCategorieName = $db->fetchColumn('SELECT title FROM tl_mae_event_cat WHERE title = ?', array($eventLocationCity), 0);
 
-    if ($DBIdCounter == 0) {
-        // Datenbank tl_mae_event_cat
-
-        if ($DBCategorieName != $eventLocationCity) {
-            $DBIdCounter ++;
-            $result = $db->insert('tl_mae_event_cat', array(
-               'id' => $DBIdCounter,
-               'tstamp' => time(),
-               'title' => $eventLocationCity,
-               'alias' => $eventLocationCityAlias
-            ));
-        }
-
-    } else {
-
-        if ($DBCategorieName != $eventLocationCity) {
-            $DBIdCounter ++;
-            $result = $db->insert('tl_mae_event_cat', array(
-               'id' => $DBIdCounter,
-               'tstamp' => time(),
-               'title' => $eventLocationCity,
-               'alias' => $eventLocationCityAlias
-            ));
-            $importCategoryCounter ++;
-        }
+    if ($DBCategorieName != $eventLocationCity) {
+        $DBIdCounter ++;
+        $result = $db->insert('tl_mae_event_cat', array(
+           'id' => $DBIdCounter,
+           'tstamp' => time(),
+           'title' => $eventLocationCity,
+           'alias' => $eventLocationCityAlias
+        ));
+        $importCategoryCounter ++;
+        // anzahl an Zeichen der Kategorie ID auslesen
     }
+
 
     // Datenbank tl_calendar_events aktualisieren.
     // Fetch EventID
     $DBEventId = $db->fetchColumn('SELECT id FROM tl_calendar_events WHERE id = ?', array($eventId), 0);
+    $DBCategorieId = $db->fetchColumn('SELECT id FROM tl_mae_event_cat WHERE title = ?', array($eventLocationCity), 0);
+
+    $DBIdCounterLenght = strlen((string)$DBCategorieId);
+
     if ($DBEventId == $eventId) {
 
         $result = $db->update('tl_calendar_events', array(
            'pid' => $kategorie,
            'title' => $eventTitle,
+           'tstamp' => time(),
            'addTime' => '1',
            'startTime' => $eventStartTime,
            'endTime' => $eventEndTime,
@@ -182,10 +173,12 @@ foreach($xml->children() as $event) {
         $updateCounter ++;
     }
     else {
+    echo $DBIdCounterLenght . ' : ' . $DBIdCounter;
 
         $result = $db->insert('tl_calendar_events', array(
            'id' => $eventId,
            'pid' => $kategorie,
+           'tstamp' => time(),
            'title' => $eventTitle,
            'addTime' => '1',
            'startTime' => $eventStartTime,
@@ -194,7 +187,7 @@ foreach($xml->children() as $event) {
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
            'konzertOrt' => $eventLocationCity,
-           'categories' => 'a:1:{i:0;s:2:"' . $DBIdCounter. '";}',
+           'categories' => 'a:1:{i:0;s:' . $DBIdCounterLenght . ':"' . $DBCategorieId. '";}',
            'teaser' => $teaser,
            'source' => 'default',
            'author' => '3'
@@ -203,8 +196,10 @@ foreach($xml->children() as $event) {
         $importCounter ++;
     }
 
+echo '<p>Counter: ' . $DBEventTitle . '<br />Location: ' . $eventLocationCity . '</p>';
 
 }
+
 
 if ($importCategoryCounter > 0 ) {
     echo '<script type="text/javascript" language="Javascript">alert("Es wurden ' . $importCategoryCounter . ' Kategorien hinzugefügt")</script>';
