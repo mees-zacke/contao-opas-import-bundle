@@ -173,7 +173,6 @@ foreach($xml->children() as $event) {
         $updateCounter ++;
     }
     else {
-    echo $DBIdCounterLenght . ' : ' . $DBIdCounter;
 
         $result = $db->insert('tl_calendar_events', array(
            'id' => $eventId,
