@@ -196,8 +196,6 @@ foreach($xml->children() as $event) {
         $importCounter ++;
     }
 
-echo '<p>Counter: ' . $DBEventTitle . '<br />Location: ' . $eventLocationCity . '</p>';
-
 }
 
 
