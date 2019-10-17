@@ -34,9 +34,9 @@ foreach($xml->children() as $event) {
     $eventId = $event->eventId;
 
     // Datum
-    $eventStartDate = ($event->eventStart)-7200; // Add 2 Hours to set GTM+2
+    $eventStartDate = ($event->eventStart)-3600; // remove 1 Hours to set GTM+1
     $eventStartTime = $eventStartDate;
-    $eventEndDate = ($event->eventEnd)-7200; // Add 2 Hours to set GTM+2
+    $eventEndDate = ($event->eventEnd)-3600; // remove 1 Hours to set GTM+1
     $eventEndTime = $eventEndDate;
 
     // Titel
