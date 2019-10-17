@@ -162,7 +162,7 @@ foreach($xml->children() as $event) {
            'startDate' => $eventStartDate,
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
-           'konzertOrt' => $eventLocationCity,
+           'concertOrt' => $eventLocationCity,
            'teaser' => $teaser,
            'source' => 'default',
            'author' => '3'
@@ -185,7 +185,7 @@ foreach($xml->children() as $event) {
            'startDate' => $eventStartDate,
            'endDate' => $eventEndDate,
            'location' => $eventLocation,
-           'konzertOrt' => $eventLocationCity,
+           'concertOrt' => $eventLocationCity,
            'categories' => 'a:1:{i:0;s:' . $DBIdCounterLenght . ':"' . $DBCategorieId. '";}',
            'teaser' => $teaser,
            'source' => 'default',
