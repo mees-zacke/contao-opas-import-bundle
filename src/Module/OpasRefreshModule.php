@@ -150,29 +150,7 @@ foreach($xml->children() as $event) {
 
     $DBIdCounterLenght = strlen((string)$DBCategorieId);
 
-    if ($DBEventId == $eventId) {
-
-        $result = $db->update('tl_calendar_events', array(
-           'pid' => $kategorie,
-           'title' => $eventTitle,
-           'tstamp' => time(),
-           'addTime' => '1',
-           'startTime' => $eventStartTime,
-           'endTime' => $eventEndTime,
-           'startDate' => $eventStartDate,
-           'endDate' => $eventEndDate,
-           'location' => $eventLocation,
-           'concertOrt' => $eventLocationCity,
-           'teaser' => $teaser,
-           'source' => 'default',
-           'author' => '3'
-        ), array(
-           'id' => $eventId,
-        ));
-
-        $updateCounter ++;
-    }
-    else {
+    if ($DBEventId !== $eventId) {
 
         $result = $db->insert('tl_calendar_events', array(
            'id' => $eventId,
