@@ -150,7 +150,7 @@ foreach($xml->children() as $event) {
 
     $DBIdCounterLenght = strlen((string)$DBCategorieId);
 
-    if ($DBEventId !== $eventId) {
+    if ($DBEventId != $eventId) {
 
         $result = $db->insert('tl_calendar_events', array(
            'id' => $eventId,
