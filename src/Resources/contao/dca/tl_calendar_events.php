@@ -14,7 +14,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['concertID'] = array
 'search'	=> true,
 'inputType'	=> 'text',
 'eval'		=> array('rgxp'=>'natural', 'maxlength'=>10, 'tl_class'=>'w50'),
-'sql'		=> "int(10) unsigned NOT NULL default NULL"
+'sql'		=> "int(10) unsigned NOT NULL default '0'"
 );
 
 // Feldkonfiguration für konzertOrt

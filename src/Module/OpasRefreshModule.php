@@ -34,10 +34,19 @@ foreach($xml->children() as $event) {
     $eventId = $event->eventId;
 
     // Datum
-    $eventStartDate = ($event->eventStart)-3600; // remove 1 Hours to set GTM+1
-    $eventStartTime = $eventStartDate;
-    $eventEndDate = ($event->eventEnd)-3600; // remove 1 Hours to set GTM+1
-    $eventEndTime = $eventEndDate;
+    $eventStartDate = ($event->eventDate);
+    $eventStartTime = ($event->eventStart);
+    $eventStartDateTimestamp = '';
+
+    $eventDate = DateTime::createFromFormat('d.m.Y H:i', $eventStartDate . ' ' . $eventStartTime);
+
+    if ($eventDate === false) {
+        die("Incorrect date string");
+    } else {
+        $eventStartDateTimestamp = $eventDate->getTimestamp();
+    }
+    // $eventEndDate = ($event->eventEnd)-3600; // remove 1 Hours to set GTM+1
+    // $eventEndTime = $eventEndDate;
 
     // Titel
     $eventTitle = $event->eventProject;
@@ -52,6 +61,7 @@ foreach($xml->children() as $event) {
         $eventLocation = $eventLocationCity;
     } else {
         $eventLocation = $eventLocationCity. ', ' .$eventLocationPlace;
+
     };
 
     // Komponisten
@@ -125,7 +135,8 @@ foreach($xml->children() as $event) {
     else {
         // Wenn keine Kategorie vergeben wurde.
         $Datum = date('d.m.Y', (int)$eventStartDate);
-        echo '<script type="text/javascript" language="Javascript">alert("Keiner Kategorie zugewiesen: ' .$eventTitle. ' vom ' .$Datum. '")</script>';
+        echo '<script type="text/javascript" language="Javascript">alert("Keiner Kategorie zugewiesen: ' .$eventTitle. ' vom ' .$Datum. '. Der Import wird abgebrochen!")</script>';
+        exit;
     }
 
     $DBCategorieName = $db->fetchColumn('SELECT title FROM tl_mae_event_cat WHERE title = ?', array($eventLocationCity), 0);
@@ -158,10 +169,9 @@ foreach($xml->children() as $event) {
            'tstamp' => time(),
            'title' => $eventTitle,
            'addTime' => '1',
-           'startTime' => $eventStartTime,
-           'endTime' => $eventEndTime,
-           'startDate' => $eventStartDate,
-           'endDate' => $eventEndDate,
+           'startTime' => $eventStartDateTimestamp,
+           'startDate' => $eventStartDateTimestamp,
+           'endTime' => '',
            'location' => $eventLocation,
            'concertOrt' => $eventLocationCity,
            'categories' => 'a:1:{i:0;s:' . $DBIdCounterLenght . ':"' . $DBCategorieId. '";}',

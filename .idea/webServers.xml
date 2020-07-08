@@ -3,11 +3,10 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="36dc88a0-2781-46b5-a21e-d6fb0e2cdf4b" name="contao-opas-import-bundle" url="http://w0070178.kasserver.com">
-        <fileTransfer host="w0070178.kasserver.com" port="22" rootFolder="/www/htdocs/w0070178/contaotest.mees-zacke.de" accessType="SFTP">
+        <fileTransfer rootFolder="/www/htdocs/w0070178/contaotest44.mees-zacke.de" accessType="SFTP" host="w0070178.kasserver.com" port="22" sshConfigId="60f22216-d6da-40c4-acb3-20184fce1dda" sshConfig="contao-opas-import-bundle">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>
