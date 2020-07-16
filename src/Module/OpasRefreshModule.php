@@ -33,7 +33,7 @@ foreach($xml->children() as $event) {
     // Even ID
     $eventId = $event->eventId;
 
-    // Datum
+    // Erstellen des Startdatums und der Startzeit
     $eventStartDate = ($event->eventDate);
     $eventStartTime = ($event->eventStart);
     $eventStartDateTimestamp = '';
@@ -45,8 +45,22 @@ foreach($xml->children() as $event) {
     } else {
         $eventStartDateTimestamp = $eventDate->getTimestamp();
     }
-    // $eventEndDate = ($event->eventEnd)-3600; // remove 1 Hours to set GTM+1
-    // $eventEndTime = $eventEndDate;
+
+    // Erstellen der Endzeit
+    $eventEndTime = ($event->eventEnd);
+    $eventEndDateTimestamp = $eventStartDateTimestamp; // Initial ist Endzeit = Startzeit
+
+    // Wenn Zeit eingetragen ist wird die neue Endzeit erstellt und ausgegeben.
+    if ($eventEndTime != '') {
+        $eventEndTimeDate = DateTime::createFromFormat('d.m.Y H:i', $eventStartDate . ' ' . $eventEndTime);
+
+        if ($eventEndTimeDate === false) {
+            die("Incorrect date string");
+        } else {
+            $eventEndDateTimestamp = $eventEndTimeDate->getTimestamp();
+        }
+
+    }
 
     // Titel
     $eventTitle = $event->eventProject;
@@ -171,7 +185,7 @@ foreach($xml->children() as $event) {
            'addTime' => '1',
            'startTime' => $eventStartDateTimestamp,
            'startDate' => $eventStartDateTimestamp,
-           'endTime' => '',
+           'endTime' => $eventEndDateTimestamp,
            'location' => $eventLocation,
            'concertOrt' => $eventLocationCity,
            'categories' => 'a:1:{i:0;s:' . $DBIdCounterLenght . ':"' . $DBCategorieId. '";}',
